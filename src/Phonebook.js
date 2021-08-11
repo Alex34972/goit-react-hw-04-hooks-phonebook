@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import shortid from 'shortid';
 import ContactForm from './components/contactForm';
 import Filter from './components/filter';
 import ContactList from './components/contactList';
 export default function Phonebook() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(window.localStorage.getItem('contacts')) ?? [],
+  );
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [filter, setFilter] = useState('');
   const nameInputId = shortid.generate();
   const numberInputId = shortid.generate();
   const id = shortid.generate();
+
+  useEffect(() => {
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
   const handleChange = event => {
     const { name, value } = event.target;
     switch (name) {
